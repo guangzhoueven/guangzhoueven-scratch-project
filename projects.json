@@ -1,0 +1,5 @@
+[
+    { "name": "登山矿车", "path": "/car" },
+    { "name": "植物大战僵尸", "path": "/plants" }
+    { "name": "弹球游戏", "path": "/ball" }
+]

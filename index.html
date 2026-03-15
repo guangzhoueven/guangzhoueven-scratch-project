@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>项目 · 索引</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            background: #f4f7fc;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1.5rem;
+        }
+
+        .project-grid {
+            max-width: 1200px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 24px;
+            padding: 2rem 1rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02), 0 0 0 1px rgba(0,0,0,0.02);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            border: 1px solid #e9eef3;
+        }
+
+        .project-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 24px -8px rgba(0, 30, 60, 0.12), 0 0 0 1px rgba(148, 163, 184, 0.3);
+        }
+
+        .card-title {
+            font-size: 1.6rem;
+            font-weight: 450;
+            color: #0f172a;
+            margin: 0.25rem 0 1.5rem 0;
+        }
+
+        .card-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #1e293b;
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1.6rem;
+            border-radius: 40px;
+            font-weight: 450;
+            font-size: 1rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: background 0.15s ease;
+            width: 100%;
+            max-width: 140px;
+        }
+
+        .card-link:hover {
+            background: #0f172a;
+        }
+
+        .loading, .error-message {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 3rem;
+            color: #64748b;
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 1rem; }
+            .project-grid { gap: 1rem; }
+            .card-title { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="project-grid" id="projectGrid">
+        <div class="loading">加载中...</div>
+    </div>
+
+    <script>
+        (function() {
+            const grid = document.getElementById('projectGrid');
+
+            fetch('./projects.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('无法加载项目列表');
+                    }
+                    return response.json();
+                })
+                .then(projects => {
+                    grid.innerHTML = '';
+
+                    if (!projects || projects.length === 0) {
+                        grid.innerHTML = '<div class="error-message">暂无项目</div>';
+                        return;
+                    }
+
+                    projects.forEach(item => {
+                        if (!item?.name || !item?.path) return;
+
+                        const card = document.createElement('div');
+                        card.className = 'project-card';
+
+                        const title = document.createElement('div');
+                        title.className = 'card-title';
+                        title.textContent = item.name;
+                        card.appendChild(title);
+
+                        const link = document.createElement('a');
+                        link.className = 'card-link';
+                        link.href = item.path;
+                        link.target = '_blank';
+                        link.rel = 'noopener noreferrer';
+                        link.textContent = '运行';
+                        card.appendChild(link);
+
+                        grid.appendChild(card);
+                    });
+                })
+                .catch(() => {
+                    grid.innerHTML = '<div class="error-message">加载失败</div>';
+                });
+        })();
+    </script>
+</body>
+</html>
