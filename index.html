@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>项目 · 索引</title>
+    <title>项目 · 启动器</title>
     <style>
         * {
             margin: 0;
@@ -115,7 +115,7 @@
                     }
 
                     projects.forEach(item => {
-                        if (!item?.name || !item?.path) return;
+                        if (!item?.name || !item?.url) return;
 
                         const card = document.createElement('div');
                         card.className = 'project-card';
@@ -127,7 +127,7 @@
 
                         const link = document.createElement('a');
                         link.className = 'card-link';
-                        link.href = item.path;
+                        link.href = item.url;
                         link.target = '_blank';
                         link.rel = 'noopener noreferrer';
                         link.textContent = '运行';
